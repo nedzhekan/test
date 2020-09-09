@@ -1,10 +1,11 @@
 public class Expression {
     public String result = "";
     public String ExpressionError = "";
+    private String[] romanNumbers = new String[] {};
 
     public boolean checkOperands(String firstOperand, String secondOperand, String operator){
         String[] arabicNumbers = new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-        String[] romanNumbers = new String[] {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+        romanNumbers = new String[] {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
         String[] operators = new String[] {"+", "-", "*", "/"};
         //промежуточный результат
         int res = 11;
@@ -97,21 +98,39 @@ public class Expression {
                     result = String.valueOf(res);
                     return true;
                 } else {
-                    if (res < 0 || res > 10) {
-                        ExpressionError = "Превышены ограничения римской системы исчесления";
-                        return false;
-                    } else {
+                    if(res > 11){
                         result = String.valueOf(res);
-                        for (int j = 0; j < 10; j++) {
-                            if (result.equals("")) {
-                                result = romanNumbers[j];
-                                return true;
-                            }
-                        }
+                        result = romansResult(result);
+                        return true;
                     }
+                    if (res <= 0) {
+                        return false;
+                    }
+                    result = String.valueOf(romanNumbers[res - 1]);
+                    return true;
                 }
             }
         }
         return true;
+    }
+
+    private String romansResult(String res){
+        String[] romansTwoNumbers = new String[] {"X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC", "C"};
+
+        if(res.length() == 3){
+            res = romansTwoNumbers[9];
+            return res;
+        }
+
+        String firstVal = String.valueOf(res.charAt(0));
+        String secondVal = String.valueOf(res.charAt(1));
+
+        if (Integer.parseInt(secondVal) == 0) {
+            res = romansTwoNumbers[Integer.parseInt(firstVal)-1];
+        } else {
+            res = romansTwoNumbers[Integer.parseInt(firstVal)-1] + romanNumbers[Integer.parseInt(secondVal)-1];
+        }
+
+        return  res;
     }
 }
